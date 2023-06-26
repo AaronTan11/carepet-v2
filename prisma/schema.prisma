@@ -11,6 +11,13 @@ datasource db {
   relationMode = "prisma"
 }
 
+
+ enum UserRole {
+   USER
+   ADMIN
+   STAFF
+ }
+
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -45,8 +52,9 @@ model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
-    emailVerified DateTime?
+    emailVerified DateTime?      
     image         String?
+    role          UserRole @default(USER) 
     accounts      Account[]
     sessions      Session[]
 }
@@ -60,3 +68,33 @@ model VerificationToken {
 }
 
 // Other Tables Starts Here
+model Pet {
+  id                 Int              @id @default(autoincrement())
+  name               String
+  species            String
+  breed              String
+  color              String
+  dateOfBirth        DateTime?
+  sex                String
+  neuteredSpayed     Boolean
+  ownerName          String
+  ownerContactInfo   String
+  MedicalRecord      MedicalRecord[]
+}
+
+model MedicalRecord {
+  id                    Int      @id @default(autoincrement())
+  vaccinationType       String?
+  vaccinationDate       DateTime?
+  knownIllnesses        String?
+  currentMedications    String?
+  allergies             String?
+  weight                Float?
+  size                  Float?
+  veterinarianName      String?
+  veterinarianContactInfo String?
+  petId                 Int
+  Pet                   Pet     @relation(fields: [petId], references: [id])
+
+  @@index([petId])
+}

@@ -18,5 +18,14 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      use: [{ loader: "@svgr/webpack", options: { icons: true } }],
+    });
+
+    return config;
+  },
 };
 export default config;
